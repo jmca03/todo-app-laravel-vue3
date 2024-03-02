@@ -1,0 +1,176 @@
+version: '3.9'
+
+services:
+  web_server:
+    user: docker
+    build:
+      context: .
+      dockerfile: ./dockerfiles/dev/web_server.dockerfile
+      args:
+        - UID=${UID}
+        - GID=${GID}
+        - WEB_SERVER_UNSECURED_PORT=${WEB_SERVER_UNSECURED_PORT}
+        - WEB_SERVER_SECURED_PORT=${WEB_SERVER_SECURED_PORT}
+    ports:
+      - ${WEB_SERVER_UNSECURED_PORT}:80
+      - ${WEB_SERVER_SECURED_PORT}:443
+    volumes:
+      - ./src:/src
+      - ./app:/app
+    restart: unless-stopped
+    container_name: nginx
+    env_file:
+      - .env.development
+    depends_on:
+      - server_side
+      - client_side
+      - database
+      - cache
+  server_side:
+    user: docker
+    build:
+      context: .
+      dockerfile: ./dockerfiles/dev/server_side.dockerfile
+      args:
+        - WEB_SERVER_UNSECURED_PORT=${WEB_SERVER_UNSECURED_PORT}
+        - WEB_SERVER_SECURED_PORT=${WEB_SERVER_SECURED_PORT}
+    volumes:
+      - ./src/var/www/html
+    container_name: php_laravel
+    restart: unless-stopped
+    env_file:
+      - .env.development
+    depends_on:
+      - database
+      - cache
+  client_side:
+    user: docker
+    build:
+      context: .
+      dockerfile: ./dockerfiles/dev/client_side.dockerfile
+      args:
+        -
+      volumes:
+        - ./app/var/www/html
+    container_name: vue3
+    restart: unless-stopped
+    env_file:
+      - .env.development
+    depends_on:
+      - server_side
+  sql_database:
+    user: docker
+    build:
+      context: .
+      dockerfile: ./dockerfiles/dev/sql_database.dockerfile
+    restart: unless-stopped
+    volumes:
+      - sql_database_volume:/var/lib/mysql
+    env_file:
+      - ./env/mysql.env
+    ports:
+      - 3306:3306
+    container_name: mysql
+  nosql_database:
+    user: docker
+    build:
+      context: .
+      dockerfile: ./dockerfiles/dev/nosql_database.dockerfile
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+    volumes:
+      - nosql_volume:/data/db
+    env_file:
+      - .env.development
+    container_name: mongodb
+  cache:
+    user: docker
+    build:
+      context: .
+      dockerfile: ./dockerfiles/dev/cache.dockerfile
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    container_name: redis
+  process_manager:
+    user: docker
+    build:
+      context: .
+      dockerfile: ./dockerfile/dev/process_manager.dockerfile
+    volumes:
+      - ./src:/src
+    restart: unless-stopped
+    container_name: supervisor
+  cron:
+    user: docker
+    build:
+      context: .
+      dockerfile: ./dockerfile/dev/cron.dockerfile
+    volumes:
+      - ./src:/src
+    restart: unless-stopped
+    container_name: cron
+  openssl:
+    user: docker
+    build:
+      context: .
+      dockerfile: ./dockerfile/dev/openssl.dockerfile
+    entrypoint: ['openssl']
+    restart: unless-stopped
+    container_name: openssl
+  composer:
+    user: docker
+    build:
+      context: .
+      dockerfile: ./dockerfile/dev/composer.dockerfile
+    volumes:
+      - ./src:/var/www/html
+    entrypoint: ['composer']
+    restart: unless-stopped
+    container_name: composer
+  artisan:
+    user: docker
+    build:
+      context: .
+      dockerfile: ./dockerfile/dev/artisan.dockerfile
+    volumes:
+      - ./src:/var/www/html
+    entrypoint: ['composer']
+    restart: unless-stopped
+    container_name: composer
+  node:
+    user: docker
+    build:
+      context: .
+      dockerfile: ./dockerfile/dev/node.dockerfile
+    volumes:
+      - ./src:/var/www/html
+    entrypoint: ['node']
+    restart: unless-stopped
+    container_name: node
+  npm:
+    user: docker
+    build:
+      context: .
+      dockerfile: ./dockerfile/dev/node.dockerfile
+    volumes:
+      - ./src:/var/www/html
+    entrypoint: ['npm']
+    restart: unless-stopped
+    container_name: npm
+  yarn:
+    user: docker
+    build:
+      context: .
+      dockerfile: ./dockerfile/dev/node.dockerfile
+    volumes:
+      - ./src:/var/www/html
+    entrypoint: ['yarn']
+    restart: unless-stopped
+    container_name: yarn
+volumes:
+  - mysql
+  - mongodb
+env_file:
+  - .env.development
