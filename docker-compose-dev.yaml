@@ -7,55 +7,52 @@ services:
       context: .
       dockerfile: ./dockerfiles/dev/web_server.dockerfile
       args:
-        - UID=${UID}
-        - GID=${GID}
-        - WEB_SERVER_UNSECURED_PORT=${WEB_SERVER_UNSECURED_PORT}
-        - WEB_SERVER_SECURED_PORT=${WEB_SERVER_SECURED_PORT}
+        - UID
+        - GID
+        - WEB_SERVER_UNSECURED_PORT
+        - WEB_SERVER_SECURED_PORT
     ports:
-      - ${WEB_SERVER_UNSECURED_PORT}:80
-      - ${WEB_SERVER_SECURED_PORT}:443
+      - 81:80
+      - 8443:443
     volumes:
       - ./src:/src
       - ./app:/app
     restart: unless-stopped
     container_name: nginx
     env_file:
-      - .env.development
+      - .env.dev
     depends_on:
       - server_side
       - client_side
-      - database
+      - sql_database
+      - nosql_database
       - cache
   server_side:
     user: docker
     build:
       context: .
       dockerfile: ./dockerfiles/dev/server_side.dockerfile
-      args:
-        - WEB_SERVER_UNSECURED_PORT=${WEB_SERVER_UNSECURED_PORT}
-        - WEB_SERVER_SECURED_PORT=${WEB_SERVER_SECURED_PORT}
     volumes:
-      - ./src/var/www/html
+      - ./src:/var/www/html
     container_name: php_laravel
     restart: unless-stopped
     env_file:
-      - .env.development
+      - .env.dev
     depends_on:
-      - database
+      - sql_database
+      - nosql_database
       - cache
   client_side:
     user: docker
     build:
       context: .
       dockerfile: ./dockerfiles/dev/client_side.dockerfile
-      args:
-        -
-      volumes:
-        - ./app/var/www/html
+    volumes:
+      - ./app/var/www/html
     container_name: vue3
     restart: unless-stopped
     env_file:
-      - .env.development
+      - .env.dev
     depends_on:
       - server_side
   sql_database:
@@ -67,7 +64,7 @@ services:
     volumes:
       - sql_database_volume:/var/lib/mysql
     env_file:
-      - ./env/mysql.env
+      - .env.dev
     ports:
       - 3306:3306
     container_name: mysql
@@ -80,9 +77,9 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - nosql_volume:/data/db
+      - nosql_database_volume:/data/db
     env_file:
-      - .env.development
+      - .env.dev
     container_name: mongodb
   cache:
     user: docker
@@ -97,7 +94,7 @@ services:
     user: docker
     build:
       context: .
-      dockerfile: ./dockerfile/dev/process_manager.dockerfile
+      dockerfile: ./dockerfiles/dev/process_manager.dockerfile
     volumes:
       - ./src:/src
     restart: unless-stopped
@@ -106,7 +103,7 @@ services:
     user: docker
     build:
       context: .
-      dockerfile: ./dockerfile/dev/cron.dockerfile
+      dockerfile: ./dockerfiles/dev/cron.dockerfile
     volumes:
       - ./src:/src
     restart: unless-stopped
@@ -115,35 +112,41 @@ services:
     user: docker
     build:
       context: .
-      dockerfile: ./dockerfile/dev/openssl.dockerfile
+      dockerfile: ./dockerfiles/dev/openssl.dockerfile
     entrypoint: ['openssl']
     restart: unless-stopped
     container_name: openssl
   composer:
-    user: docker
     build:
       context: .
-      dockerfile: ./dockerfile/dev/composer.dockerfile
+      dockerfile: ./dockerfiles/dev/composer.dockerfile
+      args:
+        - UID
+        - GID
+        - WEB_SERVER_UNSECURED_PORT
+        - WEB_SERVER_SECURED_PORT
+    env_file:
+      - .env.dev
+    tty: true
+    stdin_open: true
     volumes:
       - ./src:/var/www/html
-    entrypoint: ['composer']
     restart: unless-stopped
     container_name: composer
   artisan:
     user: docker
     build:
       context: .
-      dockerfile: ./dockerfile/dev/artisan.dockerfile
+      dockerfile: ./dockerfiles/dev/artisan.dockerfile
     volumes:
       - ./src:/var/www/html
-    entrypoint: ['composer']
     restart: unless-stopped
     container_name: composer
   node:
     user: docker
     build:
       context: .
-      dockerfile: ./dockerfile/dev/node.dockerfile
+      dockerfile: ./dockerfiles/dev/node.dockerfile
     volumes:
       - ./src:/var/www/html
     entrypoint: ['node']
@@ -153,7 +156,7 @@ services:
     user: docker
     build:
       context: .
-      dockerfile: ./dockerfile/dev/node.dockerfile
+      dockerfile: ./dockerfiles/dev/node.dockerfile
     volumes:
       - ./src:/var/www/html
     entrypoint: ['npm']
@@ -163,14 +166,12 @@ services:
     user: docker
     build:
       context: .
-      dockerfile: ./dockerfile/dev/node.dockerfile
+      dockerfile: ./dockerfiles/dev/node.dockerfile
     volumes:
       - ./src:/var/www/html
     entrypoint: ['yarn']
     restart: unless-stopped
     container_name: yarn
 volumes:
-  - mysql
-  - mongodb
-env_file:
-  - .env.development
+  sql_database_volume:
+  nosql_database_volume:
