@@ -92,10 +92,11 @@ services:
       - .env
     container_name: mongodb
   cache:
-    user: docker
     build:
       context: .
       dockerfile: ./dockerfiles/dev/cache.dockerfile
+      args:
+        - CACHE_PASSWORD=$DATABASE_PASSWORD
     restart: unless-stopped
     volumes:
       - cache_volume:/data
