@@ -2,47 +2,48 @@ version: '3.9'
 
 services:
   web_server:
-    user: docker
     build:
       context: .
       dockerfile: ./dockerfiles/dev/web_server.dockerfile
       args:
         - UID
         - GID
-        - USER
-        - GROUP
-        - WEB_SERVER_SECURED_PORT
-        - WEB_SERVER_UNSECURED_PORT
+        - CONTAINER_USER
+        - CONTAINER_GROUP
+        - CONTAINER_PASSWORD
     ports:
-      - 81:80
-      - 8443:443
+      - 80:80
+      - 443:443
     volumes:
-      - ./src:/src
-      - ./app:/app
+      - ./src:/var/www/src
+      - ./app:/var/www/app
     restart: unless-stopped
     container_name: nginx
     env_file:
       - .env
     depends_on:
       - server_side
-      - client_side
+      #   - client_side
       - sql_database
-      - nosql_database
+      #   - nosql_database
       - cache
   server_side:
-    user: docker
     build:
       context: .
       dockerfile: ./dockerfiles/dev/server_side.dockerfile
+      args:
+        - UID
+        - GID
+        - CONTAINER_USER
+        - CONTAINER_GROUP
+        - CONTAINER_PASSWORD
     volumes:
-      - ./src:/var/www/html
+      - ./src:/var/www/src
     container_name: php_laravel
     restart: unless-stopped
-    env_file:
-      - .env
     depends_on:
       - sql_database
-      - nosql_database
+      # - nosql_database
       - cache
   client_side:
     user: docker
@@ -50,7 +51,7 @@ services:
       context: .
       dockerfile: ./dockerfiles/dev/client_side.dockerfile
     volumes:
-      - ./app/var/www/html
+      - ./app/var/www/app
     container_name: vue3
     restart: unless-stopped
     env_file:
