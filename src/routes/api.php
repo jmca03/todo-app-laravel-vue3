@@ -17,3 +17,17 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+/**
+ * Health check
+ * 
+ * Determine if the api is reachable via http request
+ */
+Route::get('health-check', fn () => response()->json([
+    'statusCode' => 200,
+    'message' => 'Server is healthy',
+    'data' => [
+        'timestamp' => now()->format('Y-m-d H:i:s')
+    ]
+]));
