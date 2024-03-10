@@ -129,22 +129,22 @@ services:
       dockerfile: ./dockerfiles/dev/openssl.dockerfile
     entrypoint: ['openssl']
     restart: unless-stopped
-    container_name: openssl
-  composer:
-    build:
-      context: .
-      dockerfile: ./dockerfiles/dev/composer.dockerfile
-      args:
-        - UID
-        - GID
-        - CONTAINER_USER
-        - CONTAINER_GROUP
-    tty: true
-    stdin_open: true
-    volumes:
-      - ./src:/var/www/html
-    restart: unless-stopped
-    container_name: composer
+  #   container_name: openssl
+  # composer:
+  #   build:
+  #     context: .
+  #     dockerfile: ./dockerfiles/dev/composer.dockerfile
+  #     args:
+  #       - UID
+  #       - GID
+  #       - CONTAINER_USER
+  #       - CONTAINER_GROUP
+  #   tty: true
+  #   stdin_open: true
+  #   volumes:
+  #     - ./src:/var/www/html
+  #   restart: unless-stopped
+  #   container_name: composer
   artisan:
     user: docker
     build:
