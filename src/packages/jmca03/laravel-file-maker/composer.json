@@ -1,0 +1,24 @@
+{
+    "name": "jmca03/laravel-file-maker",
+    "description": "A compilation of stubs and artisan commands to create files based on stubs",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Jmca03\\LaravelFileMaker\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jmca03\\LaravelFileMaker\\Providers\\PackageServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "John Marvin Alarcon"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
