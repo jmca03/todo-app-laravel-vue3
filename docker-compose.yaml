@@ -39,6 +39,8 @@ services:
         - CONTAINER_PASSWORD
     volumes:
       - ./src:/var/www/src
+    # ports:
+    #   - 19000:22
     container_name: php_laravel
     restart: unless-stopped
     depends_on:
@@ -103,25 +105,45 @@ services:
       - cache_volume:/data
     ports:
       - 6379:6379
+      # - 16379:22
     container_name: redis
   process_manager:
-    user: docker
     build:
       context: .
       dockerfile: ./dockerfiles/dev/process_manager.dockerfile
+      args:
+        - UID
+        - GID
+        - CONTAINER_USER
+        - CONTAINER_GROUP
+        - CONTAINER_PASSWORD
     volumes:
-      - ./src:/src
+      - ./src:/var/www/src
+    # ports:
+    #   - 19001:22
     restart: unless-stopped
     container_name: supervisor
+    depends_on:
+      - server_side
+      - cache
   cron:
-    user: docker
     build:
       context: .
       dockerfile: ./dockerfiles/dev/cron.dockerfile
+      args:
+        - UID
+        - GID
+        - CONTAINER_USER
+        - CONTAINER_GROUP
+        - CONTAINER_PASSWORD
     volumes:
-      - ./src:/src
+      - ./src:/var/www/src
+    ports:
+      - 19002:22
     restart: unless-stopped
     container_name: cron
+    depends_on:
+      - server_side
   openssl:
     user: docker
     build:
