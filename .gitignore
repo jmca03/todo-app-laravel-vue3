@@ -1,3 +1,5 @@
 .env.dev
 .env.prod
 .env
+config/dev/self-signed-cert/nginx-self-signed.crt
+config/dev/self-signed-cert/nginx-self-signed.key

@@ -27,11 +27,14 @@ RUN apk add pcre-dev ${PHPIZE_DEPS}      \
 
 RUN addgroup -g ${GID} ${CONTAINER_GROUP}
 RUN adduser --uid ${UID} --disabled-password --ingroup ${CONTAINER_GROUP} ${CONTAINER_USER}
+RUN adduser ${CONTAINER_USER} www-data
 
 # RUN groupmod -g ${UID} www-data
 
 COPY ./src .
 
+RUN chown -R www-data:www-data /var/www/src/storage
+RUN chown -R www-data:www-data /var/www/src/bootstrap/cache
 RUN chmod -R 775 /var/www/src/storage
 RUN chmod -R 775 /var/www/src/bootstrap/cache
 

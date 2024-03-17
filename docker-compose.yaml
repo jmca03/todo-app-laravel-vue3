@@ -15,6 +15,7 @@ services:
       - 80:80
       - 443:443
     volumes:
+      - ./config/dev/self-signed-cert:/var/www/self-signed-cert
       - ./src:/var/www/src
       - ./app:/var/www/app
     restart: unless-stopped
@@ -23,9 +24,9 @@ services:
       - .env
     depends_on:
       - server_side
-      #   - client_side
+      - client_side
       - sql_database
-      #   - nosql_database
+      - nosql_database
       - cache
   server_side:
     build:
@@ -45,15 +46,17 @@ services:
     restart: unless-stopped
     depends_on:
       - sql_database
-      # - nosql_database
+      - nosql_database
       - cache
   client_side:
-    user: docker
     build:
       context: .
       dockerfile: ./dockerfiles/dev/client_side.dockerfile
     volumes:
-      - ./app/var/www/app
+      - /var/www/app/node_modules
+      - ./app:/var/www/app
+    stdin_open: true
+    tty: true
     container_name: vue3
     restart: unless-stopped
     env_file:
@@ -91,8 +94,9 @@ services:
       - 27017:27017
     volumes:
       - nosql_database_volume:/data/db
-    env_file:
-      - .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DATABASE_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DATABASE_PASSWORD}
     container_name: mongodb
   cache:
     build:
@@ -151,61 +155,7 @@ services:
       dockerfile: ./dockerfiles/dev/openssl.dockerfile
     entrypoint: ['openssl']
     restart: unless-stopped
-  #   container_name: openssl
-  # composer:
-  #   build:
-  #     context: .
-  #     dockerfile: ./dockerfiles/dev/composer.dockerfile
-  #     args:
-  #       - UID
-  #       - GID
-  #       - CONTAINER_USER
-  #       - CONTAINER_GROUP
-  #   tty: true
-  #   stdin_open: true
-  #   volumes:
-  #     - ./src:/var/www/html
-  #   restart: unless-stopped
-  #   container_name: composer
-  artisan:
-    user: docker
-    build:
-      context: .
-      dockerfile: ./dockerfiles/dev/artisan.dockerfile
-    volumes:
-      - ./src:/var/www/html
-    restart: unless-stopped
-    container_name: composer
-  node:
-    user: docker
-    build:
-      context: .
-      dockerfile: ./dockerfiles/dev/node.dockerfile
-    volumes:
-      - ./src:/var/www/html
-    entrypoint: ['node']
-    restart: unless-stopped
-    container_name: node
-  npm:
-    user: docker
-    build:
-      context: .
-      dockerfile: ./dockerfiles/dev/node.dockerfile
-    volumes:
-      - ./src:/var/www/html
-    entrypoint: ['npm']
-    restart: unless-stopped
-    container_name: npm
-  yarn:
-    user: docker
-    build:
-      context: .
-      dockerfile: ./dockerfiles/dev/node.dockerfile
-    volumes:
-      - ./src:/var/www/html
-    entrypoint: ['yarn']
-    restart: unless-stopped
-    container_name: yarn
+    container_name: openssl
 volumes:
   cache_volume:
   sql_database_volume:
