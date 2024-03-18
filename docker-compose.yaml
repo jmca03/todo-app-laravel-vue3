@@ -20,8 +20,6 @@ services:
       - ./app:/var/www/app
     restart: unless-stopped
     container_name: nginx
-    env_file:
-      - .env
     depends_on:
       - server_side
       - client_side
@@ -35,8 +33,11 @@ services:
       args:
         - UID
         - GID
+        - DATABASE_USER
+        - DATABASE_NAME
         - CONTAINER_USER
         - CONTAINER_GROUP
+        - DATABASE_PASSWORD
         - CONTAINER_PASSWORD
     volumes:
       - ./src:/var/www/src
@@ -59,8 +60,6 @@ services:
     tty: true
     container_name: vue3
     restart: unless-stopped
-    env_file:
-      - .env
     depends_on:
       - server_side
   sql_database:
@@ -77,10 +76,10 @@ services:
     volumes:
       - sql_database_volume:/var/lib/mysql
     environment:
-      MYSQL_USER: ${DATABASE_USER}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_DATABASE: ${DATABASE_NAME}
-      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+      - MYSQL_USER=${DATABASE_USER}
+      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+      - MYSQL_DATABASE=${DATABASE_NAME}
+      - MYSQL_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
     ports:
       - 3306:3306
       - 13306:22
@@ -148,14 +147,6 @@ services:
     container_name: cron
     depends_on:
       - server_side
-  openssl:
-    user: docker
-    build:
-      context: .
-      dockerfile: ./dockerfiles/dev/openssl.dockerfile
-    entrypoint: ['openssl']
-    restart: unless-stopped
-    container_name: openssl
 volumes:
   cache_volume:
   sql_database_volume:

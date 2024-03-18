@@ -1,3 +1,4 @@
+
 FROM mysql:8.0.36-debian
 
 RUN apt-get update
@@ -25,9 +26,13 @@ RUN adduser --uid ${UID} \
 
 RUN echo "${CONTAINER_USER}:${CONTAINER_PASSWORD}" | chpasswd
 
-RUN mkdir /var/run/sshd
+# Not working!!!!
+# COPY ../config/dev/sql_database.sh /var/www/build.sh
 
-CMD ["/usr/sbin/sshd", "-D"]
+# RUN chmod +x /var/www/build.sh
+# RUN /bin/sh -c /var/www/build.sh
 
 EXPOSE 3306
+
+
 
