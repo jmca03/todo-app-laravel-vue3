@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Response;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,14 +22,25 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 /**
- * Health check
+ * |--------------------------------------------------
+ * | Health check
+ * |--------------------------------------------------
  * 
  * Determine if the api is reachable via http request
  */
-Route::get('health-check', fn () => response()->json([
+Route::get('health-check', fn () => Response::json([
     'statusCode' => 200,
     'message' => 'Server is healthy',
     'data' => [
         'timestamp' => now()->format('Y-m-d H:i:s')
     ]
 ]));
+
+/**
+ * |--------------------------------------------------
+ * | Authorization Route
+ * |--------------------------------------------------
+ */
+Route::prefix('auth')->group(function () {
+    Route::post('login', [AuthController::class, 'login']);
+});
