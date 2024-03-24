@@ -17,10 +17,10 @@ trait JsonResponseTrait
      * @return JsonResponse
      */
     public function okResponse(
-        mixed $data,
+        mixed   $data,
         ?string $message = null,
-        array $headers = [],
-        int $options = 0
+        array   $headers = [],
+        int     $options = 0
     ): JsonResponse {
         return JsonResponseAction::run(
             data: $data,
@@ -41,10 +41,10 @@ trait JsonResponseTrait
      * @return JsonResponse
      */
     public function createdResponse(
-        mixed $data,
+        mixed   $data,
         ?string $message = null,
-        array $headers = [],
-        int $options = 0
+        array   $headers = [],
+        int     $options = 0
     ): JsonResponse {
         return JsonResponseAction::run(
             data: $data,
@@ -65,10 +65,10 @@ trait JsonResponseTrait
      * @return JsonResponse
      */
     public function lockedReponse(
-        mixed $data,
+        mixed   $data,
         ?string $message = null,
-        array $headers = [],
-        int $options = 0
+        array   $headers = [],
+        int     $options = 0
     ): JsonResponse {
         return JsonResponseAction::run(
             data: $data,
@@ -89,10 +89,10 @@ trait JsonResponseTrait
      * @return JsonResponse
      */
     public function notFoundResponse(
-        mixed $data,
+        mixed   $data,
         ?string $message = null,
-        array $headers = [],
-        int $options = 0
+        array   $headers = [],
+        int     $options = 0
     ): JsonResponse {
         return JsonResponseAction::run(
             data: $data,
@@ -113,10 +113,10 @@ trait JsonResponseTrait
      * @return JsonResponse
      */
     public function forbiddenResponse(
-        mixed $data,
+        mixed   $data,
         ?string $message = null,
-        array $headers = [],
-        int $options = 0
+        array   $headers = [],
+        int     $options = 0
     ): JsonResponse {
         return JsonResponseAction::run(
             data: $data,
@@ -161,10 +161,10 @@ trait JsonResponseTrait
      * @return JsonResponse
      */
     public function badRequestResponse(
-        mixed $data,
+        mixed   $data,
         ?string $message = null,
-        array $headers = [],
-        int $options = 0
+        array   $headers = [],
+        int     $options = 0
     ): JsonResponse {
         return JsonResponseAction::run(
             data: $data,
@@ -185,10 +185,10 @@ trait JsonResponseTrait
      * @return JsonResponse
      */
     public function unauthiruzedResponse(
-        mixed $data,
+        mixed   $data,
         ?string $message = null,
-        array $headers = [],
-        int $options = 0
+        array   $headers = [],
+        int     $options = 0
     ): JsonResponse {
         return JsonResponseAction::run(
             data: $data,
@@ -257,10 +257,10 @@ trait JsonResponseTrait
      * @return JsonResponse
      */
     public function internalServerErrorResponse(
-        mixed $data,
+        mixed   $data,
         ?string $message = null,
-        array $headers = [],
-        int $options = 0
+        array   $headers = [],
+        int     $options = 0
     ): JsonResponse {
         return JsonResponseAction::run(
             data: $data,
@@ -282,8 +282,8 @@ trait JsonResponseTrait
      * @return JsonResponse
      */
     public function jsonResponse(
-        mixed   $data = [],
         int     $statusCode,
+        mixed   $data = [],
         ?string $message = null,
         array   $headers = [],
         int     $options = 0
