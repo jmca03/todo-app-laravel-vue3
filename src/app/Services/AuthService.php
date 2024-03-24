@@ -50,8 +50,11 @@ class AuthService
                 throw new UnprocessableEntityHttpException(__('auth.failed'));
             }
 
+            /** @var User */
+            $user = Auth::user();
+
             return $this->okResponse(
-                data: ['user' => Auth::user()->only(['id', 'username', 'email']), 'accessToken' => $this->generateToken()],
+                data: ['user' => $user->only(['id', 'username', 'email']), 'accessToken' => $this->generateToken()],
                 message: __('auth.success')
             );
         } catch (Throwable $th) {
