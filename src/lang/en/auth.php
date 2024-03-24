@@ -18,5 +18,8 @@ return [
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'success' => 'You are now login',
     'error_title' => 'Authentication Error',
-    'error_subtitle' => 'Authentication Error (:subtitle)'
+    'error_subtitle' => 'Authentication Error (:subtitle)',
+    'logout' => [
+        'success' => 'You are now logout'
+    ]
 ];
