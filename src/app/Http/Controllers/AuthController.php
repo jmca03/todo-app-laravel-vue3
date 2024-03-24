@@ -30,4 +30,14 @@ class AuthController extends Controller
     {
         return $this->service->login($request->toArray());
     }
+
+    /**
+     * Logout to the app.
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout(): JsonResponse
+    {
+        return $this->service->logout();
+    }
 }

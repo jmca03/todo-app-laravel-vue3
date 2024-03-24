@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use App\Actions\ExtractExceptionStatusCodeAction;
+use Illuminate\Database\Eloquent\Builder;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class AuthService
@@ -34,7 +35,7 @@ class AuthService
      * Login to app
      * 
      * @param  array $request
-     * @return JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function login(array $request): JsonResponse
     {
@@ -61,10 +62,55 @@ class AuthService
             LoggerAction::run(
                 title: __('auth.error_title'),
                 message: $th->getMessage(),
-                variant: 'error'
+                variant: 'error',
+                context: [
+                    'subtitle' => __('auth.error_subtitle', [
+                        'subtitle' => 'login method'
+                    ])
+                ]
             );
 
             return $this->jsonResponse(
+                data: Arr::only($request, 'username'),
+                statusCode: ExtractExceptionStatusCodeAction::run(e: $th),
+                message: $th->getMessage()
+            );
+        }
+    }
+
+    /**
+     * Logout
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout(): JsonResponse
+    {
+        try {
+            /** @var User */
+            $user = Auth::user();
+
+            $user->tokens->each(function ($token) {
+                $token->delete();
+            });
+
+            return $this->okResponse(
+                data: [],
+                message: __('auth.logout.success')
+            );
+        } catch (Throwable $th) {
+            LoggerAction::run(
+                title: __('auth.error_title'),
+                message: $th->getMessage(),
+                variant: 'error',
+                context: [
+                    'subtitle' => __('auth.error_subtitle', [
+                        'subtitle' => 'logout method'
+                    ])
+                ]
+            );
+
+            return $this->jsonResponse(
+                data: [],
                 statusCode: ExtractExceptionStatusCodeAction::run(e: $th),
                 message: $th->getMessage()
             );
