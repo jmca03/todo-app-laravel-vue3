@@ -2,14 +2,15 @@
 
 namespace App\Services;
 
+use ErrorException;
 use Throwable;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use App\Actions\LoggerAction;
 use App\Traits\JsonResponseTrait;
 use Illuminate\Http\JsonResponse;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
-use App\Repositories\User\UserRepository;
 use App\Actions\ExtractExceptionStatusCodeAction;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
@@ -21,7 +22,7 @@ class AuthService
     /**
      * Constructor
      * 
-     * @param UserRepository $userRepository
+     * @param \App\Repositories\UserRepository $userRepository
      * @return void
      */
     public function __construct(protected UserRepository $userRepository)
@@ -38,7 +39,6 @@ class AuthService
     public function login(array $request): JsonResponse
     {
         try {
-
             if (!Auth::attempt($this->credentials($request))) {
                 // Log login attempt
                 LoggerAction::run(
