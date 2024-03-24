@@ -14,3 +14,7 @@
 | -              | Supervisor | -       |
 | Authentication | Passport   | -       |
 | -              | Socialite  | -       |
+
+### Pending Tasks
+
+- allow user to use email or username when logging in.
