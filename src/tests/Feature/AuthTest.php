@@ -12,10 +12,11 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class AuthTest extends TestCase
 {
     use DatabaseTransactions;
+
     /**
-     * Test login
+     * Test if user can login to the app
      * 
-     * @test
+     * return void
      */
     public function test_login(): void
     {
@@ -29,6 +30,23 @@ class AuthTest extends TestCase
 
         // Act
         $response = $this->postJson('/api/auth/login', $payload);
+
+        // Assert
+        $response->assertOk();
+    }
+
+    /**
+     * Test if user can logout
+     * 
+     * @return void
+     */
+    public function test_logout(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+
+        // Act
+        $response = $this->actingAs(user: $user, guard: 'api')->postJson('/api/auth/logout');
 
         // Assert
         $response->assertOk();
