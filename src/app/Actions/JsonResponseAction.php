@@ -2,9 +2,9 @@
 
 namespace App\Actions;
 
-use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Response;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class JsonResponseAction
