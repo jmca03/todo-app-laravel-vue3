@@ -72,7 +72,7 @@ trait JsonResponseTrait
     ): JsonResponse {
         return JsonResponseAction::run(
             data: $data,
-            statusCode: 200,
+            statusCode: 423,
             message: $message,
             headers: $headers,
             options: $options
@@ -96,7 +96,7 @@ trait JsonResponseTrait
     ): JsonResponse {
         return JsonResponseAction::run(
             data: $data,
-            statusCode: 200,
+            statusCode: 404,
             message: $message,
             headers: $headers,
             options: $options
@@ -120,7 +120,7 @@ trait JsonResponseTrait
     ): JsonResponse {
         return JsonResponseAction::run(
             data: $data,
-            statusCode: 200,
+            statusCode: 403,
             message: $message,
             headers: $headers,
             options: $options
@@ -144,7 +144,7 @@ trait JsonResponseTrait
     ): JsonResponse {
         return JsonResponseAction::run(
             data: $data,
-            statusCode: 200,
+            statusCode: 204,
             message: $message,
             headers: $headers,
             options: $options
@@ -168,7 +168,7 @@ trait JsonResponseTrait
     ): JsonResponse {
         return JsonResponseAction::run(
             data: $data,
-            statusCode: 200,
+            statusCode: 400,
             message: $message,
             headers: $headers,
             options: $options
@@ -184,7 +184,7 @@ trait JsonResponseTrait
      * @param int     $options
      * @return JsonResponse
      */
-    public function unauthiruzedResponse(
+    public function unauthorizedResponse(
         mixed   $data,
         ?string $message = null,
         array   $headers = [],
@@ -192,7 +192,7 @@ trait JsonResponseTrait
     ): JsonResponse {
         return JsonResponseAction::run(
             data: $data,
-            statusCode: 200,
+            statusCode: 401,
             message: $message,
             headers: $headers,
             options: $options
@@ -208,7 +208,7 @@ trait JsonResponseTrait
      * @param int     $options
      * @return JsonResponse
      */
-    public function tooManyReqyestsResponse(
+    public function tooManyRequestsResponse(
         mixed $data,
         ?string $message = null,
         array $headers = [],
@@ -216,7 +216,7 @@ trait JsonResponseTrait
     ): JsonResponse {
         return JsonResponseAction::run(
             data: $data,
-            statusCode: 200,
+            statusCode: 429,
             message: $message,
             headers: $headers,
             options: $options
@@ -224,7 +224,7 @@ trait JsonResponseTrait
     }
 
     /**
-     * Unprocessable Entity Rresponse
+     * Unprocessable Entity Response
      * 
      * @param mixed   $data,
      * @param ?string $message
@@ -232,7 +232,7 @@ trait JsonResponseTrait
      * @param int     $options
      * @return JsonResponse
      */
-    public function unoricessableEntityResponse(
+    public function unprocessableEntityResponse(
         mixed $data,
         ?string $message = null,
         array $headers = [],
@@ -240,7 +240,7 @@ trait JsonResponseTrait
     ): JsonResponse {
         return JsonResponseAction::run(
             data: $data,
-            statusCode: 200,
+            statusCode: 422,
             message: $message,
             headers: $headers,
             options: $options
@@ -264,7 +264,7 @@ trait JsonResponseTrait
     ): JsonResponse {
         return JsonResponseAction::run(
             data: $data,
-            statusCode: 200,
+            statusCode: 500,
             message: $message,
             headers: $headers,
             options: $options
@@ -288,12 +288,68 @@ trait JsonResponseTrait
         array   $headers = [],
         int     $options = 0
     ): JsonResponse {
-        return JsonResponseAction::run(
-            data: $data,
-            statusCode: $statusCode,
-            message: $message,
-            headers: $headers,
-            options: $options
-        );
+        return match ($statusCode) {
+            200 => $this->okResponse(
+                data: $data,
+                message: $message,
+                headers: $headers,
+                options: $options
+            ),
+            423 => $this->lockedReponse(
+                data: $data,
+                message: $message,
+                headers: $headers,
+                options: $options
+            ),
+            201 => $this->createdResponse(
+                data: $data,
+                message: $message,
+                headers: $headers,
+                options: $options
+            ),
+            404 => $this->notFoundResponse(
+                data: $data,
+                message: $message,
+                headers: $headers,
+                options: $options
+            ),
+            204 => $this->noContentResponse(
+                data: $data,
+                message: $message,
+                headers: $headers,
+                options: $options
+            ),
+            400 => $this->badRequestResponse(
+                data: $data,
+                message: $message,
+                headers: $headers,
+                options: $options
+            ),
+            401 => $this->unauthorizedResponse(
+                data: $data,
+                message: $message,
+                headers: $headers,
+                options: $options
+            ),
+            429 => $this->tooManyRequestsResponse(
+                data: $data,
+                message: $message,
+                headers: $headers,
+                options: $options
+            ),
+            500 => $this->internalServerErrorResponse(
+                data: $data,
+                message: $message,
+                headers: $headers,
+                options: $options
+            ),
+            default => JsonResponseAction::run(
+                data: $data,
+                statusCode: $statusCode,
+                message: $message,
+                headers: $headers,
+                options: $options
+            )
+        };
     }
 }
