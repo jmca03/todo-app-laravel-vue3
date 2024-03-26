@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 use App\Actions\LoggerAction;
 use App\Traits\JsonResponseTrait;
 use Illuminate\Http\JsonResponse;
-use App\Http\Resources\UserResource;
 use App\Repositories\TodoRepository;
-use App\Http\Resources\UserCollection;
 use App\Actions\ExtractExceptionStatusCodeAction;
+use App\Http\Resources\TodoCollection;
+use App\Http\Resources\TodoResource;
 
 class TodoService
 {
@@ -40,7 +40,7 @@ class TodoService
             $resource = $this->repository->getAll($request);
 
             return $this->okResponse(
-                UserCollection::collection($resource)
+                TodoCollection::collection($resource)
             );
         } catch (Throwable $th) {
             LoggerAction::run(
@@ -74,7 +74,7 @@ class TodoService
             $resource = $this->repository->create($request);
 
             return $this->createdResponse(
-                new UserResource($resource)
+                new TodoResource($resource)
             );
         } catch (Throwable $th) {
             LoggerAction::run(
@@ -108,7 +108,7 @@ class TodoService
             $resource = $this->repository->get($id);
 
             return $this->okResponse(
-                new UserResource($resource)
+                new TodoResource($resource)
             );
         } catch (Throwable $th) {
             LoggerAction::run(
@@ -145,7 +145,7 @@ class TodoService
             $resource = $this->repository->update($id, $request);
 
             return $this->okResponse(
-                new UserResource($resource)
+                new TodoResource($resource)
             );
         } catch (Throwable $th) {
             LoggerAction::run(
@@ -181,7 +181,7 @@ class TodoService
             $resource = $this->repository->delete($id);
 
             return $this->okResponse(
-                new UserResource($resource)
+                new TodoResource($resource)
             );
         } catch (Throwable $th) {
             LoggerAction::run(
