@@ -25,7 +25,7 @@ class UserRepository implements BaseResourceRepositoryInterface
      * Get all resources.
      * 
      * @param  Request $request
-     * @return LengthAwarePaginator
+     * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function getAll(Request $request): LengthAwarePaginator
     {
@@ -72,6 +72,8 @@ class UserRepository implements BaseResourceRepositoryInterface
     public function update(string|int $id, array $request): array
     {
         $user = $this->user->findOrFail($id);
+
+        $user->update($request);
 
         return $user->toArray();
     }
