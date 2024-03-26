@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('todos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable()->constrained(table: 'users')->nullOnDelete();
+            $table->text('content');
+            $table->timestamp('scheduled_at');
+            $table->timestamp('expired_at');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
