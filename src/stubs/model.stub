@@ -5,9 +5,10 @@ namespace {{ namespace }};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\ModelScopeTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class {{ class }} extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     use ModelScopeTrait;
 }
