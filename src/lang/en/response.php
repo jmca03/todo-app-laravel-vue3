@@ -21,7 +21,7 @@ return [
             'message' => 'Created'
         ],
         'notFound' => [
-            'code' => 494,
+            'code' => 404,
             'message' => 'Not Found'
         ],
         'forbidden' => [
