@@ -1,6 +1,6 @@
 <?php
 
-namespace Jmca03\LaravelFileMaker\Console\Commands;
+namespace App\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 
@@ -39,7 +39,7 @@ class MakeService extends GeneratorCommand
      */
     protected function getStub(): string
     {
-        return __DIR__ . '/../../stubs/service.stub';
+        return base_path(path: 'stubs/service.stub');
     }
 
     /**

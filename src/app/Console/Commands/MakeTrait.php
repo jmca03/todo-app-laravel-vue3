@@ -1,6 +1,6 @@
 <?php
 
-namespace Jmca03\LaravelFileMaker\Console\Commands;
+namespace App\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 
@@ -39,7 +39,7 @@ class MakeTrait extends GeneratorCommand
      */
     protected function getStub(): string
     {
-        return __DIR__ . '/../../stubs/trait.stub';
+        return base_path(path: 'stubs/trait.stub');
     }
 
     /**
