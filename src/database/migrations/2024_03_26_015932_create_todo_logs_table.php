@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('todo_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('todo_id')->constrained('todos')->nullOnDelete();
+            $table->foreignId('todo_id')->nullable()->constrained('todos')->nullOnDelete();
             $table->text('content');
-            $table->text('remarks');
             $table->timestamp('scheduled_at');
             $table->timestamp('expired_at');
             $table->timestamps();
