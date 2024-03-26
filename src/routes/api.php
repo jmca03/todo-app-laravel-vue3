@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TodoController;
 use Illuminate\Support\Facades\Response;
 
 /*
@@ -47,4 +48,9 @@ Route::prefix('auth')->group(function () {
     Route::middleware('auth:api')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
     });
+});
+
+
+Route::middleware('auth:api')->group(function () {
+    Route::apiResource('todo', TodoController::class);
 });
