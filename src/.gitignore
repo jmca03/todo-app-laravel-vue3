@@ -20,3 +20,4 @@ yarn-error.log
 packages/.git
 supervisord.log
 supervisord.pid
+packages

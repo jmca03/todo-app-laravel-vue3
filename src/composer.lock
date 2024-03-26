@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2f471c0fc7b1327378f05a6c999c647d",
+    "content-hash": "361ead0a28260b96fa849206c0cbc0d1",
     "packages": [
         {
             "name": "brick/math",
@@ -7065,41 +7065,6 @@
             "time": "2020-07-09T08:09:16+00:00"
         },
         {
-            "name": "jmca03/laravel-file-maker",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "packages/jmca03/laravel-file-maker",
-                "reference": "789deb4fe6bdbb840f2121247c1a453727c0bf57"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Jmca03\\LaravelFileMaker\\Providers\\PackageServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Jmca03\\LaravelFileMaker\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "John Marvin Alarcon"
-                }
-            ],
-            "description": "A compilation of stubs and artisan commands to create files based on stubs",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
             "name": "laravel/pint",
             "version": "v1.14.0",
             "source": {
@@ -9351,9 +9316,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "jmca03/laravel-file-maker": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
