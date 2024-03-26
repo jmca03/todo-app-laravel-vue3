@@ -63,15 +63,15 @@ class TodoTest extends TestCase
         $payload = [
             'user_id' => $user->id,
             'content' => $this->faker->text(),
-            'scheduled_at' => now(),
-            'expired_at' => now()
+            'scheduled_at' => now()->format('Y-m-d H:i'),
+            'expired_at' => now()->format('Y-m-d H:i')
         ];
 
         // Act
         $response = $this->actingAs($user, 'api')->postJson('/api/todo/', $payload);
 
         // Assert
-        $response->assertOk();
+        $response->assertCreated();
     }
 
     /**
@@ -91,8 +91,8 @@ class TodoTest extends TestCase
         $payload = [
             'user_id' => $user->id,
             'content' => $this->faker->text(),
-            'scheduled_at' => now(),
-            'expired_at' => now()
+            'scheduled_at' => now()->format('Y-m-d H:i'),
+            'expired_at' => now()->format('Y-m-d H:i')
         ];
 
         // Act
