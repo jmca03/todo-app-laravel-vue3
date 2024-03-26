@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TodoRequest;
 use Illuminate\Http\Request;
 use App\Services\TodoService;
 use Illuminate\Http\JsonResponse;
+use App\Http\Requests\TodoRequest;
 
 class TodoController extends Controller
 {
