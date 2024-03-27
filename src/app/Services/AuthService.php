@@ -70,6 +70,8 @@ class AuthService
                 ]
             );
 
+            report($th);
+
             return $this->jsonResponse(
                 data: Arr::only($request, 'username'),
                 statusCode: ExtractExceptionStatusCodeAction::run(e: $th),
@@ -108,6 +110,9 @@ class AuthService
                     ])
                 ]
             );
+
+            report($th);
+
 
             return $this->jsonResponse(
                 data: [],
