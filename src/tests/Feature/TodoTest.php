@@ -12,6 +12,9 @@ class TodoTest extends TestCase
 {
     use DatabaseTransactions, WithFaker;
 
+    /** @var string */
+    protected string $route = '/api/todo';
+
     /**
      * Test index
      * 
@@ -23,7 +26,7 @@ class TodoTest extends TestCase
         $user = User::factory()->create();
 
         // Act
-        $response = $this->actingAs($user, 'api')->getJson('/api/todo');
+        $response = $this->actingAs($user, 'api')->getJson($this->route);
 
         // Assert
         $response->assertOk();
@@ -39,9 +42,11 @@ class TodoTest extends TestCase
         // Arrange
         $user = User::factory()->create();
         $todo = Todo::factory()->create();
+        /** @var string|int */
+        $id = $todo->id;
 
         // Act
-        $response = $this->actingAs($user, 'api')->getJson('/api/todo/' . $todo->id);
+        $response = $this->actingAs($user, 'api')->getJson($this->route . '/' . $id);
 
         // Assert
         $response->assertOk();
@@ -68,7 +73,7 @@ class TodoTest extends TestCase
         ];
 
         // Act
-        $response = $this->actingAs($user, 'api')->postJson('/api/todo/', $payload);
+        $response = $this->actingAs($user, 'api')->postJson($this->route, $payload);
 
         // Assert
         $response->assertCreated();
@@ -84,6 +89,8 @@ class TodoTest extends TestCase
         // Arrange
         $user = User::factory()->create();
         $todo = Todo::factory()->create();
+        /** @var string|int */
+        $id = $todo->id;
 
         /**
          * @var array<object>
@@ -96,7 +103,7 @@ class TodoTest extends TestCase
         ];
 
         // Act
-        $response = $this->actingAs($user, 'api')->patchJson('/api/todo/' . $todo->id, $payload);
+        $response = $this->actingAs($user, 'api')->patchJson($this->route . '/' . $id, $payload);
 
         // Assert
         $response->assertOk();
@@ -112,9 +119,11 @@ class TodoTest extends TestCase
         // Arrange
         $user = User::factory()->create();
         $todo = Todo::factory()->create();
+        /** @var string|int */
+        $id = $todo->id;
 
         // Act
-        $response = $this->actingAs($user, 'api')->deleteJson('/api/todo/' . $todo->id);
+        $response = $this->actingAs($user, 'api')->deleteJson($this->route . '/' . $id);
 
         // Assert
         $response->assertOk();
