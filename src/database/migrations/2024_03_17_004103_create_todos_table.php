@@ -17,6 +17,9 @@ return new class extends Migration
             $table->text('content');
             $table->timestamp('scheduled_at');
             $table->timestamp('expired_at');
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });
