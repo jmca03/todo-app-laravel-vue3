@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TodoController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Response;
 
 /*
@@ -52,5 +53,6 @@ Route::prefix('auth')->group(function () {
 
 
 Route::middleware('auth:api')->group(function () {
+    Route::apiResource('user', UserController::class);
     Route::apiResource('todo', TodoController::class);
 });
