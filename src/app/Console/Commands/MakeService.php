@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Support\Str;
+use App\Actions\StringSplitAction;
 use Illuminate\Console\GeneratorCommand;
 
 
@@ -44,11 +46,35 @@ class MakeService extends GeneratorCommand
 
     /**
      * Get Default Namespace
+     * 
+     * @override
+     * 
      * @param string $rootNamespace
      * @return string 
      */
     protected function getDefaultNamespace($rootNamespace): string
     {
         return $rootNamespace . '\Services';
+    }
+
+    /**
+     * Replace the class name for the given stub.
+     * 
+     * @override
+     * @param  string  $stub
+     * @param  string  $name
+     * @return string
+     */
+    protected function replaceClass($stub, $name): string
+    {
+        $class = str_replace($this->getNamespace($name) . '\\', '', $name);
+
+        $newStub = Str::replace(['DummyClass', '{{ class }}', '{{class}}'], $class, $stub);
+
+        $baseName = StringSplitAction::run($class);
+
+        $baseName = Str::replace(['{{base}}', '{{ base }}'], head($baseName), $newStub);
+
+        return Str::replace(['{{lowerBase}}', '{{ lowerBase }}'], Str::lower(head($baseName)), $newStub);
     }
 }
