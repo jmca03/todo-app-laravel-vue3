@@ -12,7 +12,9 @@ use Illuminate\Http\JsonResponse;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use App\Actions\ExtractExceptionStatusCodeAction;
+use App\Http\Requests\RegisterUserRequest;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Lang;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class AuthService
@@ -20,15 +22,18 @@ class AuthService
 
     use JsonResponseTrait;
 
+    /** @var string */
+    protected string $lang = 'auth';
+
     /**
      * Constructor
      * 
-     * @param \App\Repositories\UserRepository $userRepository
+     * @param \App\Repositories\UserRepository $repository
      * @return void
      */
-    public function __construct(protected UserRepository $userRepository)
+    public function __construct(protected UserRepository $repository)
     {
-        $this->userRepository = $userRepository;
+        $this->repository = $repository;
     }
 
     /**
@@ -43,12 +48,12 @@ class AuthService
             if (!Auth::attempt($this->credentials($request))) {
                 // Log login attempt
                 LoggerAction::run(
-                    title: __('auth.error_subtitle'),
-                    message: __('auth.failed'),
+                    title: Lang::get($this->lang . '.error_title'),
+                    message: Lang::get($this->lang . '.failed'),
                     variant: 'error'
                 );
 
-                throw new UnprocessableEntityHttpException(__('auth.failed'));
+                throw new UnprocessableEntityHttpException(Lang::get($this->lang . $this->lang . '.failed'));
             }
 
             /** @var User */
@@ -56,16 +61,16 @@ class AuthService
 
             return $this->okResponse(
                 data: ['user' => $user->only(['id', 'username', 'email']), 'accessToken' => $this->generateToken()],
-                message: __('auth.success')
+                message: Lang::get($this->lang . '.success')
             );
         } catch (Throwable $th) {
             LoggerAction::run(
-                title: __('auth.error_title'),
+                title: Lang::get($this->lang . '.error_title'),
                 message: $th->getMessage(),
                 variant: 'error',
                 context: [
-                    'subtitle' => __('auth.error_subtitle', [
-                        'subtitle' => 'login method'
+                    'subtitle' => Lang::get($this->lang . '.error_subtitle', [
+                        'subtitle' => 'LOGIN method'
                     ])
                 ]
             );
@@ -97,16 +102,57 @@ class AuthService
 
             return $this->okResponse(
                 data: [],
-                message: __('auth.logout.success')
+                message: Lang::get($this->lang . '.logout.success')
             );
         } catch (Throwable $th) {
             LoggerAction::run(
-                title: __('auth.error_title'),
+                title: Lang::get($this->lang . '.error_title'),
                 message: $th->getMessage(),
                 variant: 'error',
                 context: [
-                    'subtitle' => __('auth.error_subtitle', [
-                        'subtitle' => 'logout method'
+                    'subtitle' => Lang::get($this->lang . '.error_subtitle', [
+                        'subtitle' => 'LOGOUT method'
+                    ])
+                ]
+            );
+
+            report($th);
+
+
+            return $this->jsonResponse(
+                data: [],
+                statusCode: ExtractExceptionStatusCodeAction::run(e: $th),
+                message: $th->getMessage()
+            );
+        }
+    }
+
+    /**
+     * Register new account
+     * 
+     * @param array $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function register(array $request): JsonResponse
+    {
+        try {
+
+            $resource = $this->repository->create($request);
+
+            // send an verification email here
+
+            return $this->createdResponse(
+                data: $resource,
+                message: Lang::get($this->lang . 'register.success')
+            );
+        } catch (Throwable $th) {
+            LoggerAction::run(
+                title: Lang::get($this->lang . '.error_title'),
+                message: $th->getMessage(),
+                variant: 'error',
+                context: [
+                    'subtitle' => Lang::get('.error_subtitle', [
+                        'subtitle' => 'REGISTER method'
                     ])
                 ]
             );

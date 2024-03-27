@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterUserRequest;
 
 class AuthController extends Controller
 {
@@ -39,5 +40,16 @@ class AuthController extends Controller
     public function logout(): JsonResponse
     {
         return $this->service->logout();
+    }
+
+    /**
+     * Register an account.
+     * 
+     * @param \App\Http\Requests\RegisterUserRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function register(RegisterUserRequest $request): JsonResponse
+    {
+        return $this->service->register($request->toArray());
     }
 }
