@@ -2,7 +2,17 @@
 
 namespace {{ namespace }};
 
+use Lorisleiva\Actions\Concerns\AsAction;
+
 final class {{ class }}
 {
+    use AsAction;
 
+    /**
+     * Handler
+     */
+    public function handle()
+    {
+        //
+    }
 }
