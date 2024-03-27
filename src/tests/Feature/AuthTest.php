@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class AuthTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseTransactions, WithFaker;
 
     /**
      * Test if user can login to the app
@@ -50,5 +50,32 @@ class AuthTest extends TestCase
 
         // Assert
         $response->assertOk();
+    }
+
+    /**
+     * Test regoster
+     * 
+     * @return void
+     */
+    public function test_register(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+
+        /**
+         * @var array<object>
+         */
+        $payload = [
+            'name' => $this->faker->name(),
+            'username' => $this->faker->unique()->userName(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'password' => 'Password@123',
+        ];
+
+        // Act
+        $response = $this->actingAs(user: $user, guard: 'api')->postJson('/api/auth/register', $payload);
+
+        // Assert
+        $response->assertCreated();
     }
 }
