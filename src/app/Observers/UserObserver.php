@@ -2,7 +2,9 @@
 
 namespace App\Observers;
 
+use App\Enums\UserLogCategoryEnum;
 use App\Models\User;
+use App\Models\UserLog;
 
 class UserObserver
 {
@@ -11,7 +13,7 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        //
+        $this->logUser($user, UserLogCategoryEnum::CREATE->value);
     }
 
     /**
@@ -19,7 +21,7 @@ class UserObserver
      */
     public function updated(User $user): void
     {
-        //
+        $this->logUser($user, UserLogCategoryEnum::UPDATE->value);
     }
 
     /**
@@ -27,7 +29,7 @@ class UserObserver
      */
     public function deleted(User $user): void
     {
-        //
+        $this->logUser($user, UserLogCategoryEnum::DELETE->value);
     }
 
     /**
@@ -44,5 +46,22 @@ class UserObserver
     public function forceDeleted(User $user): void
     {
         //
+    }
+
+    /**
+     * Log User
+     * 
+     * @param \App\Models\User $user
+     * @return void
+     */
+    private function logUser(User $user, string $category): void
+    {
+        UserLog::factory()->create([
+            'user_id' => $user->id,
+            'user_agent' => request()->server('HTTP_USER_AGENT'),
+            'ip_address' => request()->getClientIp(),
+            'data' => $user->getOriginal(),
+            'category' => $category
+        ]);
     }
 }
