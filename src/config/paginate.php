@@ -6,5 +6,5 @@
  * |--------------------------------------|
  */
 return [
-    'default_pagination' => env('DEFAULT_PAGINATION', 15)
+    'limit' => env('DEFAULT_PAGINATION', 15)
 ];
