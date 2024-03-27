@@ -13,9 +13,9 @@ class {{ class }} extends Controller
      *
      * @return void
      */
-     public function __construct()
+     public function __construct(protected $service)
      {
-        //
+        // $this->service = $service;
      }
 
     /**
@@ -26,7 +26,7 @@ class {{ class }} extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        //
+        return $this->service->index($request);
     }
 
     /**
@@ -37,7 +37,7 @@ class {{ class }} extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        //
+        return $this->service->store($request->toArray());
     }
 
     /**
@@ -48,7 +48,7 @@ class {{ class }} extends Controller
      */
     public function show(string|int $id): JsonResponse
     {
-        //
+        return $this->service->show($id);
     }
 
     /**
@@ -60,7 +60,7 @@ class {{ class }} extends Controller
      */
     public function update(Request $request, string|int $id): JsonResponse
     {
-        //
+        return $this->service->update($id, $request->toArray());
     }
 
     /**
@@ -71,6 +71,6 @@ class {{ class }} extends Controller
      */
     public function destroy(string|int $id): JsonResponse
     {
-        //
+        return $this->service->destroy($id);
     }
 }
