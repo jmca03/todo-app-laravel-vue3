@@ -76,6 +76,7 @@ class TodoService
     public function store(array $request): JsonResponse
     {
         try {
+
             $resource = $this->repository->create($request);
 
             return $this->createdResponse(
