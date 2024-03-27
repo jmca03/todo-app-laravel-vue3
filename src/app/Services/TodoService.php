@@ -57,6 +57,8 @@ class TodoService
                 ]
             );
 
+            report($th);
+
             return $this->jsonResponse(
                 data: $request->toArray(),
                 statusCode: ExtractExceptionStatusCodeAction::run(e: $th),
@@ -91,6 +93,8 @@ class TodoService
                 ]
             );
 
+            report($th);
+
             return $this->jsonResponse(
                 data: $request,
                 statusCode: ExtractExceptionStatusCodeAction::run(e: $th),
@@ -124,6 +128,8 @@ class TodoService
                     ])
                 ]
             );
+
+            report($th);
 
             return $this->jsonResponse(
                 data: [
@@ -162,6 +168,8 @@ class TodoService
                 ]
             );
 
+            report($th);
+
             return $this->jsonResponse(
                 data: [
                     'id' => $id
@@ -197,6 +205,8 @@ class TodoService
                     ])
                 ]
             );
+
+            report($th);
 
             return $this->jsonResponse(
                 data: [
