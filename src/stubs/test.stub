@@ -11,15 +11,107 @@ class {{ class }} extends TestCase
 {
     use DatabaseTransactions, WithFaker;
     
+    /** @var string */
+    protected string $route = '/api';
+
     /**
-     * A basic feature test example.
-     *
+     * Test index
+     * 
      * @return void
      */
-    public function test_example(): void
+    public function test_index(): void
     {
-        $response = $this->get('/');
+        // Arrange
+        $user = User::factory()->create();
 
-        $response->assertStatus(200);
+        // Act
+        $response = $this->actingAs($user, 'api')->getJson($this->route);
+
+        // Assert
+        $response->assertOk();
+    }
+
+    /**
+     * Test show
+     * 
+     * @return void
+     */
+    public function test_show(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        /** @var string|int */
+        $id = 1;
+
+        // Act
+        $response = $this->actingAs($user, 'api')->getJson($this->route . '/' . $id);
+
+        // Assert
+        $response->assertOk();
+    }
+
+    /**
+     * Test create
+     * 
+     * @return void
+     */
+    public function test_create(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+
+        /**
+         * @var array<object>
+         */
+        $payload = [];
+
+        // Act
+        $response = $this->actingAs($user, 'api')->postJson($this->route, $payload);
+
+        // Assert
+        $response->assertCreated();
+    }
+
+    /**
+     * Test update
+     * 
+     * @return void
+     */
+    public function test_update(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        /** @var string|int */
+        $id = 1;
+
+        /**
+         * @var array<object>
+         */
+        $payload = [];
+
+        // Act
+        $response = $this->actingAs($user, 'api')->patchJson($this->route . '/' . $id, $payload);
+
+        // Assert
+        $response->assertOk();
+    }
+
+    /**
+     * Test delete
+     * 
+     * @return void
+     */
+    public function test_delete(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        /** @var string|int */
+        $id = 1;
+
+        // Act
+        $response = $this->actingAs($user, 'api')->deleteJson($this->route . '/' . $id);
+
+        // Assert
+        $response->assertOk();
     }
 }
