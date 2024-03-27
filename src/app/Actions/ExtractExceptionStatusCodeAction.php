@@ -3,9 +3,9 @@
 namespace App\Actions;
 
 use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ExtractExceptionStatusCodeAction
