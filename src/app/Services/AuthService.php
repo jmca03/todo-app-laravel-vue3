@@ -53,7 +53,7 @@ class AuthService
                     variant: 'error'
                 );
 
-                throw new UnprocessableEntityHttpException(Lang::get($this->lang . $this->lang . '.failed'));
+                throw new UnprocessableEntityHttpException(Lang::get($this->lang . '.failed'));
             }
 
             /** @var User */
@@ -151,7 +151,7 @@ class AuthService
                 message: $th->getMessage(),
                 variant: 'error',
                 context: [
-                    'subtitle' => Lang::get('.error_subtitle', [
+                    'subtitle' => Lang::get($this->lang . '.error_subtitle', [
                         'subtitle' => 'REGISTER method'
                     ])
                 ]
