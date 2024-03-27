@@ -16,10 +16,15 @@ return new class extends Migration
             $table->string('name');
             $table->string('username')->unique();
             $table->string('email')->unique();
+            $table->string('alt_email')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('alt_email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('admin')->default(false);
             $table->boolean('active')->default(true);
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
