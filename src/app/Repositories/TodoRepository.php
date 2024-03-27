@@ -13,12 +13,12 @@ class TodoRepository implements BaseResourceRepositoryInterface
     /**
      * Constructor
      * 
-     * @param Todo $todo
+     * @param Todo $resource
      * @return void
      */
-    public function __construct(protected Todo $todo)
+    public function __construct(protected Todo $resource)
     {
-        $this->todo = $todo;
+        $this->resource = $resource;
     }
 
     /**
@@ -29,10 +29,10 @@ class TodoRepository implements BaseResourceRepositoryInterface
      */
     public function getAll(Request $request): LengthAwarePaginator
     {
-        $todo = $this->todo->with([]);
+        $resource = $this->resource->with([]);
 
-        return $todo->paginate(
-            Arr::get($request, 'page', config('paginate.default_pagination'))
+        return $resource->paginate(
+            Arr::get($request, 'limit', config('paginate.limit'))
         );
     }
 
@@ -44,9 +44,9 @@ class TodoRepository implements BaseResourceRepositoryInterface
      */
     public function get(string|int $id): array
     {
-        $todo = $this->todo->findOrFail($id);
+        $resource = $this->resource->findOrFail($id);
 
-        return $todo->toArray();
+        return $resource->toArray();
     }
 
     /**
@@ -57,9 +57,9 @@ class TodoRepository implements BaseResourceRepositoryInterface
      */
     public function create(array $request): array
     {
-        $todo = $this->todo->create($request);
+        $resource = $this->resource->create($request);
 
-        return $todo->toArray();
+        return $resource->toArray();
     }
 
     /**
@@ -71,11 +71,11 @@ class TodoRepository implements BaseResourceRepositoryInterface
      */
     public function update(string|int $id, array $request): array
     {
-        $todo = $this->todo->findOrFail($id);
+        $resource = $this->resource->findOrFail($id);
 
-        $todo->update($request);
+        $resource->update($request);
 
-        return $todo->toArray();
+        return $resource->toArray();
     }
 
     /**
@@ -86,9 +86,9 @@ class TodoRepository implements BaseResourceRepositoryInterface
      */
     public function delete(string|int $id): array
     {
-        $todo = $this->todo->findOrFail($id);
+        $resource = $this->resource->findOrFail($id);
 
-        $todo = $todo->deleteOrFail();
+        $resource = $resource->deleteOrFail();
 
         return [];
     }

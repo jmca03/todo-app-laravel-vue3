@@ -13,12 +13,12 @@ class UserRepository implements BaseResourceRepositoryInterface
     /**
      * Constructor
      * 
-     * @param User $user
+     * @param User $resource
      * @return void
      */
-    public function __construct(protected User $user)
+    public function __construct(protected User $resource)
     {
-        $this->user = $user;
+        $this->resource = $resource;
     }
 
     /**
@@ -29,10 +29,10 @@ class UserRepository implements BaseResourceRepositoryInterface
      */
     public function getAll(Request $request): LengthAwarePaginator
     {
-        $user = $this->user->with([]);
+        $resource = $this->resource->with([]);
 
-        return $user->paginate(
-            Arr::get($request, 'page', config('paginate.default_pagination'))
+        return $resource->paginate(
+            Arr::get($request, 'limit', config('paginate.limit'))
         );
     }
 
@@ -44,9 +44,9 @@ class UserRepository implements BaseResourceRepositoryInterface
      */
     public function get(string|int $id): array
     {
-        $user = $this->user->findOrFail($id);
+        $resource = $this->resource->findOrFail($id);
 
-        return $user->toArray();
+        return $resource->toArray();
     }
 
     /**
@@ -57,9 +57,9 @@ class UserRepository implements BaseResourceRepositoryInterface
      */
     public function create(array $request): array
     {
-        $user = $this->user->create($request);
+        $resource = $this->resource->create($request);
 
-        return $user->toArray();
+        return $resource->toArray();
     }
 
     /**
@@ -71,11 +71,11 @@ class UserRepository implements BaseResourceRepositoryInterface
      */
     public function update(string|int $id, array $request): array
     {
-        $user = $this->user->findOrFail($id);
+        $resource = $this->resource->findOrFail($id);
 
-        $user->update($request);
+        $resource->update($request);
 
-        return $user->toArray();
+        return $resource->toArray();
     }
 
     /**
@@ -86,9 +86,9 @@ class UserRepository implements BaseResourceRepositoryInterface
      */
     public function delete(string|int $id): array
     {
-        $user = $this->user->findOrFail($id);
+        $resource = $this->resource->findOrFail($id);
 
-        $user = $user->deleteOrFail();
+        $resource = $resource->deleteOrFail();
 
         return [];
     }
