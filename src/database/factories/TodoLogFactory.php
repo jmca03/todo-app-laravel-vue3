@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\TodoLogCategoryEnum;
 use App\Models\Todo;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,11 +18,14 @@ class TodoLogFactory extends Factory
      */
     public function definition(): array
     {
+        $resource = Todo::factory()->create();
         return [
-            'todo_id' => Todo::factory(),
+            'todo_id' => $resource->id,
             'content' => fake()->text(),
             'scheduled_at' => now(),
-            'expired_at' => now()
+            'expired_at' => now(),
+            'data' => $resource->getOriginal(),
+            'category' => TodoLogCategoryEnum::CREATE->value
         ];
     }
 }
