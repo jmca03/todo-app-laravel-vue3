@@ -21,7 +21,8 @@ class TodoFactory extends Factory
             'user_id' => User::factory(),
             'content' => fake()->text(),
             'scheduled_at' => now(),
-            'expired_at' => now()
+            'expired_at' => now(),
+            'created_by' => User::factory()
         ];
     }
 }
