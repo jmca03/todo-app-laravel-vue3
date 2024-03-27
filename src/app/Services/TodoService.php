@@ -7,15 +7,18 @@ use Illuminate\Http\Request;
 use App\Actions\LoggerAction;
 use App\Traits\JsonResponseTrait;
 use Illuminate\Http\JsonResponse;
-use App\Repositories\TodoRepository;
-use App\Actions\ExtractExceptionStatusCodeAction;
-use App\Http\Resources\TodoCollection;
 use App\Http\Resources\TodoResource;
+use App\Repositories\TodoRepository;
+use Illuminate\Support\Facades\Lang;
+use App\Http\Resources\TodoCollection;
+use App\Actions\ExtractExceptionStatusCodeAction;
 
 class TodoService
 {
-
     use JsonResponseTrait;
+
+    /** @var string */
+    protected string $lang = 'todo';
 
     /**
      * Constructor
@@ -40,16 +43,16 @@ class TodoService
             $resource = $this->repository->getAll($request);
 
             return $this->okResponse(
-                TodoCollection::collection($resource)
+                new TodoCollection($resource)
             );
         } catch (Throwable $th) {
             LoggerAction::run(
-                title: __('todo.error_title'),
+                title: Lang::get(key: $this->lang . '.error_title'),
                 message: $th->getMessage(),
                 variant: 'error',
                 context: [
-                    'subtitle' => __('todo.error_subtitle', [
-                        'subtitle' => 'index method'
+                    'subtitle' => Lang::get(key: $this->lang . '.error_subtitle', replace: [
+                        'subtitle' => 'INDEX Method'
                     ])
                 ]
             );
@@ -78,12 +81,12 @@ class TodoService
             );
         } catch (Throwable $th) {
             LoggerAction::run(
-                title: __('todo.error_title'),
+                title: Lang::get(key: $this->lang . '.error_title'),
                 message: $th->getMessage(),
                 variant: 'error',
                 context: [
-                    'subtitle' => __('todo.error_subtitle', [
-                        'subtitle' => 'store method'
+                    'subtitle' => Lang::get(key: $this->lang . '.error_subtitle', replace: [
+                        'subtitle' => 'STORE Method'
                     ])
                 ]
             );
@@ -112,12 +115,12 @@ class TodoService
             );
         } catch (Throwable $th) {
             LoggerAction::run(
-                title: __('todo.error_title'),
+                title: Lang::get(key: $this->lang . '.error_title'),
                 message: $th->getMessage(),
                 variant: 'error',
                 context: [
-                    'subtitle' => __('todo.error_subtitle', [
-                        'subtitle' => 'show method'
+                    'subtitle' => Lang::get(key: $this->lang . '.error_subtitle', replace: [
+                        'subtitle' => 'SHOW Method'
                     ])
                 ]
             );
@@ -149,12 +152,12 @@ class TodoService
             );
         } catch (Throwable $th) {
             LoggerAction::run(
-                title: __('todo.error_title'),
+                title: Lang::get(key: $this->lang . '.error_title'),
                 message: $th->getMessage(),
                 variant: 'error',
                 context: [
-                    'subtitle' => __('todo.error_subtitle', [
-                        'subtitle' => 'update method'
+                    'subtitle' => Lang::get(key: $this->lang . '.error_subtitle', replace: [
+                        'subtitle' => 'UPDATE Method'
                     ])
                 ]
             );
@@ -185,12 +188,12 @@ class TodoService
             );
         } catch (Throwable $th) {
             LoggerAction::run(
-                title: __('todo.error_title'),
+                title: Lang::get(key: $this->lang . '.error_title'),
                 message: $th->getMessage(),
                 variant: 'error',
                 context: [
-                    'subtitle' => __('todo.error_subtitle', [
-                        'subtitle' => 'destroy method'
+                    'subtitle' => Lang::get(key: $this->lang . '.error_subtitle', replace: [
+                        'subtitle' => 'DESTROY Method'
                     ])
                 ]
             );
