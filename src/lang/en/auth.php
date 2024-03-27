@@ -21,5 +21,8 @@ return [
     'error_subtitle' => 'Authentication Error (:subtitle)',
     'logout' => [
         'success' => 'You are now logout'
+    ],
+    'register' => [
+        'success' => 'Successfully registered'
     ]
 ];
