@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained(table: 'users')->nullOnDelete();
             $table->text('content');
-            $table->timestamp('scheduled_at');
-            $table->timestamp('expired_at');
+            $table->timestamp('scheduled_at')->nullable();
+            $table->timestamp('expired_at')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
