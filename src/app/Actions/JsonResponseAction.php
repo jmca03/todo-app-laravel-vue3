@@ -6,6 +6,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Response;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class JsonResponseAction
 {
@@ -28,15 +30,13 @@ class JsonResponseAction
         array   $headers,
         int     $options
     ): JsonResponse {
-        if ($data instanceof Collection) {
-            return ($data)->response()
-                ->statusCode($statusCode)
-                ->header($headers)
-                ->options($options)
-                ->additional([
-                    'statusCode' => $statusCode,
-                    'message'    => $message ?: $this->defaultMessage($statusCode)
-                ]);
+
+        if ($data instanceof Collection || $data instanceof ResourceCollection || $data instanceof AnonymousResourceCollection) {
+
+            return $data->additional([
+                'message' => $message ?: $this->defaultMessage($statusCode),
+                'statusCode' => $statusCode
+            ])->response();
         }
 
         return Response::json([
