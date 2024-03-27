@@ -17,6 +17,8 @@ return new class extends Migration
             $table->text('content');
             $table->timestamp('scheduled_at');
             $table->timestamp('expired_at');
+            $table->jsonb('data');
+            $table->string('category');
             $table->timestamps();
         });
     }
