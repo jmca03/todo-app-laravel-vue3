@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Enums\TodoLogCategoryEnum;
 use App\Models\Todo;
 use App\Models\TodoLog;
 
@@ -15,7 +16,7 @@ class TodoObserver
      */
     public function created(Todo $todo): void
     {
-        $this->logTodo($todo);
+        $this->logTodo($todo, TodoLogCategoryEnum::CREATE->value);
     }
 
     /**
@@ -26,7 +27,7 @@ class TodoObserver
      */
     public function updated(Todo $todo): void
     {
-        $this->logTodo($todo);
+        $this->logTodo($todo, TodoLogCategoryEnum::UPDATE->value);
     }
 
     /**
@@ -34,7 +35,7 @@ class TodoObserver
      */
     public function deleted(Todo $todo): void
     {
-        //
+        $this->logTodo($todo, TodoLogCategoryEnum::DELETE->value);
     }
 
     /**
@@ -57,15 +58,18 @@ class TodoObserver
      * Todo Log Factory
      * 
      * @param \App\Models\Todo $todo
+     * @param string $category
      * @return void
      */
-    private function logTodo(Todo $todo): void
+    private function logTodo(Todo $todo, string $category): void
     {
         TodoLog::factory()->create([
             'todo_id'       => data_get($todo, 'id'),
             'content'       => data_get($todo, 'content'),
             'scheduled_at'  => data_get($todo, 'scheduled_at'),
             'expired_at'    => data_get($todo, 'expired_at'),
+            'data'          => $todo->getOriginal(),
+            'category'      => $category
         ]);
     }
 }
