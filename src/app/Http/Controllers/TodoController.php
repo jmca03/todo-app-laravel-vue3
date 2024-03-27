@@ -70,7 +70,7 @@ class TodoController extends Controller
      * @param string|int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(string|int $id): JsonResponse
     {
         return $this->service->destroy($id);
     }
