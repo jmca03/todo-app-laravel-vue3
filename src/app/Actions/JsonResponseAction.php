@@ -42,7 +42,7 @@ class JsonResponseAction
         return Response::json([
             'data' => $data,
             'statusCode' => $statusCode,
-            'mesage' => $message ?: $this->defaultMessage($statusCode)
+            'message' => $message ?: $this->defaultMessage($statusCode)
         ], $statusCode, $headers, $options);
     }
 
