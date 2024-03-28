@@ -19,6 +19,7 @@ class TodoFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
+            'sequence' => 1,
             'content' => fake()->text(),
             'scheduled_at' => now(),
             'expired_at' => now(),
