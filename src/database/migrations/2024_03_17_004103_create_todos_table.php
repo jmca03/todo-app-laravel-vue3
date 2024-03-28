@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('todos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained(table: 'users')->nullOnDelete();
+            $table->bigInteger('sequence');
             $table->text('content');
             $table->timestamp('scheduled_at')->nullable();
             $table->timestamp('expired_at')->nullable();
