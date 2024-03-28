@@ -7,6 +7,8 @@ use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Interfaces\BaseResourceRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 
 class TodoRepository implements BaseResourceRepositoryInterface
 {
@@ -57,6 +59,10 @@ class TodoRepository implements BaseResourceRepositoryInterface
      */
     public function create(array $request): array
     {
+        if (Schema::hasColumn($this->resource->getTable(), 'created_by') && Auth::check()) {
+            Arr::set($request, 'created_by', Auth::id());
+        }
+
         $resource = $this->resource->create($request);
 
         return $resource->toArray();
@@ -73,6 +79,10 @@ class TodoRepository implements BaseResourceRepositoryInterface
     {
         $resource = $this->resource->findOrFail($id);
 
+        if (Schema::hasColumn($this->resource->getTable(), 'updated_by')  && Auth::check()) {
+            Arr::set($request, 'updated_by', Auth::id());
+        }
+
         $resource->update($request);
 
         return $resource->toArray();
@@ -88,8 +98,15 @@ class TodoRepository implements BaseResourceRepositoryInterface
     {
         $resource = $this->resource->findOrFail($id);
 
+        if (Schema::hasColumn($this->resource->getTable(), 'deleted_by')  && Auth::check()) {
+            $resource->deleted_by = Auth::id();
+            $resource->save();
+        }
+
         $resource = $resource->deleteOrFail();
 
-        return [];
+        return [
+            'id' => $id
+        ];
     }
 }
