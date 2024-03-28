@@ -67,6 +67,7 @@ class TodoTest extends TestCase
          */
         $payload = [
             'user_id' => $user->id,
+            'sequence' => 1,
             'content' => $this->faker->text(),
             'scheduled_at' => now()->format('Y-m-d H:i'),
             'expired_at' => now()->format('Y-m-d H:i')
@@ -97,6 +98,7 @@ class TodoTest extends TestCase
          */
         $payload = [
             'user_id' => $user->id,
+            'sequence' => 1,
             'content' => $this->faker->text(),
             'scheduled_at' => now()->format('Y-m-d H:i'),
             'expired_at' => now()->format('Y-m-d H:i')
@@ -106,7 +108,7 @@ class TodoTest extends TestCase
         $response = $this->actingAs($user, 'api')->patchJson($this->route . '/' . $id, $payload);
 
         // Assert
-        $response->assertOk();
+    $response->assertOk();
     }
 
     /**
